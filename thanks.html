@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanksgiving Meal</title>
+</head>
+<body>
+    <h1 class="greeting">Thanksgiving Meal Details</h1>
+    <p class="fullMeal"></p>
+    <p class="priceInfo"></p>
+    <p class="calorieInfo"></p>
+    <p class="calorieWarning"></p>
+
+    <script>
+        const thanksgivingMeal = {
+            starter: {
+                fruit: "honeydew melon",
+                wine: "moscato",
+                calories: 180
+            },
+            entree: {
+                meat: "turkey",
+                alt: "Stuffed Green Peppers",
+                vegetables: {
+                    potatoes: "Creamed mashed potatoes",
+                    greens: "French beans",
+                    salad: "Radacchio"
+                },
+                sides: {
+                    bread: "garlic bread rolls",
+                    pasta: "Macaroni and Cheese"
+                },
+                calories: 450
+            },
+            dessert: {
+                ice_cream: "pumpkin-vanilla",
+                cake: "frosted pumpkin pie",
+                calories: 300
+            },
+            total_cost: 25.0,
+            adult_cost: 25.0,
+            senior_discount: 0.10,
+
+            prettyPrint: function() {
+                let menuStr = `Starter: ${this.starter.fruit} with ${this.starter.wine}<br>` +
+                              `Entree: ${this.entree.meat} or ${this.entree.alt}, with ${this.entree.vegetables.potatoes}, ` +
+                              `${this.entree.vegetables.greens}, and ${this.entree.sides.bread}<br>` +
+                              `Dessert: ${this.dessert.ice_cream} and ${this.dessert.cake}`;
+                console.log("Menu string: ", menuStr); // Debugging
+                return menuStr;
+            },
+
+            totalPrice: function(isSenior) {
+                console.log("Calculating the price...");
+                let total = this.total_cost;
+
+                if (isSenior) {
+                    total -= (this.total_cost * this.senior_discount);
+                    console.log("Senior discount applied. Price: $ " + total);
+                } else {
+                    console.log("Regular price applied. Price: $ " + total);
+                }
+                return total.toFixed(2); // Format to two decimal places
+            },
+
+            totalCalories: function() {
+                let totalCalories = this.starter.calories + this.entree.calories + this.dessert.calories;
+                console.log("Total calories calculated: ", totalCalories);  
+                return totalCalories;
+            },
+
+            caloriesFrom: function(indicator) {
+                console.log("Getting calories for:", indicator);  
+                
+                if (indicator === 'starter') {
+                    return this.starter.calories;
+                } else if (indicator === 'entree') {
+                    return this.entree.calories;
+                } else if (indicator === 'dessert') {
+                    return this.dessert.calories;
+                } else {
+                    console.log("Invalid option passed.");  
+                    return "Invalid option!";
+                }
+            }
+        };
+
+       
+        console.log(thanksgivingMeal.prettyPrint());
+        console.log("Total Price (Senior):", thanksgivingMeal.totalPrice(true));
+        console.log("Total Price (Adult):", thanksgivingMeal.totalPrice(false));
+        console.log("Total Calories:", thanksgivingMeal.totalCalories());
+        console.log("Calories from Dessert:", thanksgivingMeal.caloriesFrom("dessert"));
+
+        
+        document.querySelector(".fullMeal").innerHTML = thanksgivingMeal.prettyPrint();
+        document.querySelector(".priceInfo").textContent = 
+            `Total Price (Senior): $${thanksgivingMeal.totalPrice(true)} (Discount applied), ` +
+            `Total Price (Adult): $${thanksgivingMeal.totalPrice(false)}`;
+        document.querySelector(".calorieInfo").textContent = "Total Calories: " + thanksgivingMeal.totalCalories();
+
+        // Calorie warning for seniors
+        if (thanksgivingMeal.totalCalories() > 600) {
+            document.querySelector(".calorieWarning").textContent = "Warning: Total calorie count is high for seniors.";
+        }
+    </script>
+</body>
+</html>
+
